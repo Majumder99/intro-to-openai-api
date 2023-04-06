@@ -5,7 +5,7 @@ import cors from "cors";
 
 const configuration = new Configuration({
   organization: "org-SUPl1gSLK3tF1F32a78Daixm",
-  apiKey: "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",
+  apiKey: "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",
 });
 
 const openai = new OpenAIApi(configuration);
@@ -26,18 +26,29 @@ app.use(cors());
 // });
 
 app.post("/", async (req, res) => {
-  const { message } = req.body;
+  console.log(req);
+  const { messages } = req.body;
+  console.log(messages);
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: `${message}` }],
+    messages: [
+      { role: "system", content: "You are sportsGpt for sports fan" },
+      ...messages,
+    ],
   });
 
   res.json({ completion: completion.data.choices[0].message });
   // console.log(completeion.data);
 });
 
-const PORT = 9000 || process.env.PORT;
+const PORT = 9000;
 
 app.listen(PORT, () => {
   console.log(`App is listening in ${PORT}`);
 });
+
+// const completion = await openai.createChatCompletion({
+//   model: "gpt-3.5-turbo",
+//   messages: [{ role: "system", content: "You are a graphics designer" }],
+// });
+// console.log(completion.data.choices[0].message);
